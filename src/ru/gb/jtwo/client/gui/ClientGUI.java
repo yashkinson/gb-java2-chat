@@ -54,6 +54,10 @@ public class ClientGUI extends JFrame implements Thread.UncaughtExceptionHandler
         panelBottom.add(btnSend, BorderLayout.EAST);
         add(panelBottom, BorderLayout.SOUTH);
 
+        JScrollPane scrollPane = new JScrollPane(log);
+        add(scrollPane, BorderLayout.CENTER);
+        log.setEditable(false);
+
         setVisible(true);
     }
 
