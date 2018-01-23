@@ -4,8 +4,10 @@ import ru.gb.jtwo.server.core.ChatServer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ServerGUI extends JFrame{
+public class ServerGUI extends JFrame implements ActionListener{
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -33,6 +35,26 @@ public class ServerGUI extends JFrame{
         setAlwaysOnTop(true);
         setLayout(new GridLayout(1, 2));
 
+        btnStart.addActionListener(this);
+        btnStop.addActionListener(this);
+
+        add(btnStart);
+        add(btnStop);
+
         setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object src = e.getSource();
+        if(src == btnStart){
+            System.out.println("Кнопка START нажата");
+            chatServer.start();
+        } else if(src == btnStop){
+            System.out.println("Кнопка STOP нажата");
+            chatServer.stop();
+        } else{
+            throw new RuntimeException("Unknown button presed");
+        }
     }
 }
