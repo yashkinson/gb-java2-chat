@@ -1,6 +1,7 @@
 package ru.gb.jtwo.client.gui;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class ClientGUI extends JFrame implements Thread.UncaughtExceptionHandler{
     public static void main(String[] args) {
@@ -14,6 +15,23 @@ public class ClientGUI extends JFrame implements Thread.UncaughtExceptionHandler
 
     private static final int WIDTH = 400;
     private static final int HEIGHT = 300;
+
+    private final JTextArea log = new JTextArea();
+
+    private final JPanel panelTop = new JPanel(new GridLayout(2, 3));
+    private final JTextField tfIPAddress = new JTextField("127.0.0.1");
+    private final JTextField tfPort = new JTextField("8189");
+    private final JCheckBox cbAlwaysOnTop = new JCheckBox("Always on top");
+    private final JTextField tfLogin = new JTextField("ivan_igorevich");
+    private final JPasswordField tfPassword = new JPasswordField("123456");
+    private final JButton btnLogin = new JButton("Login");
+
+    private final JPanel panelBottom = new JPanel(new BorderLayout());
+    private final JButton btnDisconnect = new JButton("Disconnect");
+    private final JTextField tfMessage = new JTextField();
+    private final JButton btnSend = new JButton("Send");
+
+    private final JList<String> userList = new JList<>();
 
     ClientGUI() {
         Thread.setDefaultUncaughtExceptionHandler(this);
