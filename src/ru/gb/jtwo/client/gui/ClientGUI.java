@@ -41,6 +41,19 @@ public class ClientGUI extends JFrame implements Thread.UncaughtExceptionHandler
         setLocationRelativeTo(null);
         setTitle("Chat Client");
 
+        panelTop.add(tfIPAddress);
+        panelTop.add(tfPort);
+        panelTop.add(cbAlwaysOnTop);
+        panelTop.add(tfLogin);
+        panelTop.add(tfPassword);
+        panelTop.add(btnLogin);
+        add(panelTop, BorderLayout.NORTH);
+
+        panelBottom.add(btnDisconnect, BorderLayout.WEST);
+        panelBottom.add(tfMessage, BorderLayout.CENTER);
+        panelBottom.add(btnSend, BorderLayout.EAST);
+        add(panelBottom, BorderLayout.SOUTH);
+
         setVisible(true);
     }
 
