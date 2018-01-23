@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ServerGUI extends JFrame implements ActionListener{
+public class ServerGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler{
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -27,6 +27,7 @@ public class ServerGUI extends JFrame implements ActionListener{
     private final JButton btnStop = new JButton("Stop");
 
     ServerGUI(){
+        Thread.setDefaultUncaughtExceptionHandler(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(POS_X, POS_Y, WIDTH, HEIGHT);
 
@@ -56,5 +57,23 @@ public class ServerGUI extends JFrame implements ActionListener{
         } else{
             throw new RuntimeException("Unknown button presed");
         }
+    }
+
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        e.printStackTrace(); // если есть консоль то распечатать в нее сообщение
+        StackTraceElement[] stackTraceElements = e.getStackTrace(); //получаем сообщение у объекта исключения в виде массива stackTraceElements
+        String message;
+        if (stackTraceElements.length == 0) { // если массив из элементов stackTraceElements пустой, то вывести об этом сообщение
+            message = "Empty Stacktrace";
+        } else {
+            message = e.getClass().getCanonicalName() + // полное имя класса исключения
+                    ": " + e.getMessage() + "\n" +      // сообщение
+                    "\t at " + stackTraceElements[0];   // первый элемент stackTraceElements
+        }
+
+        // Показываем полученое исключение в отдельном всплывающем окошке
+        JOptionPane.showMessageDialog(this, message, "Exception", JOptionPane.ERROR_MESSAGE);
+        System.exit(1);
     }
 }
