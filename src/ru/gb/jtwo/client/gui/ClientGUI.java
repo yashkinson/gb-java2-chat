@@ -2,8 +2,10 @@ package ru.gb.jtwo.client.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ClientGUI extends JFrame implements Thread.UncaughtExceptionHandler{
+public class ClientGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler{
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -40,6 +42,9 @@ public class ClientGUI extends JFrame implements Thread.UncaughtExceptionHandler
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setTitle("Chat Client");
+
+        cbAlwaysOnTop.addActionListener(this);
+        btnSend.addActionListener(this);
 
         panelTop.add(tfIPAddress);
         panelTop.add(tfPort);
@@ -81,5 +86,18 @@ public class ClientGUI extends JFrame implements Thread.UncaughtExceptionHandler
         // Показываем полученое исключение в отдельном всплывающем окошке
         JOptionPane.showMessageDialog(this, message, "Exception", JOptionPane.ERROR_MESSAGE);
         System.exit(1);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object src = e.getSource();
+        if (src == cbAlwaysOnTop) {
+            setAlwaysOnTop(cbAlwaysOnTop.isSelected());
+        } else if (src == btnSend) {
+            // sending
+        } else {
+            throw new RuntimeException("Unknown source: " + src);
+        }
+
     }
 }
