@@ -58,6 +58,10 @@ public class ClientGUI extends JFrame implements Thread.UncaughtExceptionHandler
         add(scrollPane, BorderLayout.CENTER);
         log.setEditable(false);
 
+        JScrollPane scrollUsers = new JScrollPane(userList);
+        scrollUsers.setPreferredSize(new Dimension(100, 0));
+        add(scrollUsers, BorderLayout.EAST);
+
         setVisible(true);
     }
 
