@@ -8,12 +8,12 @@ public class ServerSocketThread extends Thread{
 
     @Override
     public void run() {
-        while (true){
+        while (!isInterrupted()){
             System.out.println("Server socket thread works");
         }
     }
 
-    ServerSocketThread (String name, int port){
+    public ServerSocketThread (String name, int port){
         super(name);
         this.port = port;
         start();
