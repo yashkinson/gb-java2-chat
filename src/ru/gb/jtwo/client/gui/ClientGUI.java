@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ClientGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler{
     public static void main(String[] args) {
@@ -45,6 +47,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
 
         cbAlwaysOnTop.addActionListener(this);
         btnSend.addActionListener(this);
+        tfMessage.addActionListener(this);
 
         panelTop.add(tfIPAddress);
         panelTop.add(tfPort);
@@ -93,10 +96,26 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         Object src = e.getSource();
         if (src == cbAlwaysOnTop) {
             setAlwaysOnTop(cbAlwaysOnTop.isSelected());
-        } else if (src == btnSend) {
-            // sending
+        } else if (src == btnSend || src == tfMessage) {
+            sendMessage();
         } else {
             throw new RuntimeException("Unknown source: " + src);
+        }
+
+    }
+
+    public void sendMessage(){
+        String msg = tfMessage.getText();
+        String username = tfLogin.getText();
+        if("".equals(msg)) return;
+        log.append(username + ": " + msg + "\n");
+        tfMessage.setText(null);
+        tfMessage.requestFocusInWindow();
+        try (FileWriter out = new FileWriter("log.txt", true)){
+            out.write(username + ": " + msg + "\n");
+            out.flush();
+        } catch(IOException e){
+            throw new RuntimeException(e);
         }
 
     }
