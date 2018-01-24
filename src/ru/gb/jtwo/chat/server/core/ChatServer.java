@@ -7,10 +7,17 @@ public class ChatServer {
     ServerSocketThread serverSocketThread;
 
     public void start(int port){
-        serverSocketThread = new ServerSocketThread("Server thread", port);
+        if (serverSocketThread != null && serverSocketThread.isAlive()){
+            System.out.println("Server is already running");
+        } else{
+            serverSocketThread = new ServerSocketThread("Server thread", port);
+        }
     }
 
     public void stop(){
-        serverSocketThread.interrupt();
+        if (serverSocketThread == null || !serverSocketThread.isAlive())
+            System.out.println("Server is not running");
+        else
+            serverSocketThread.interrupt();
     }
 }
