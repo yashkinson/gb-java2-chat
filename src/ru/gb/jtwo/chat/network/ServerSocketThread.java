@@ -1,4 +1,21 @@
 package ru.gb.jtwo.chat.network;
+/**
+ * Слушает входящие соединения и выдает готовые сокеты для каждого клиента
+ */
+public class ServerSocketThread extends Thread{
 
-public class ServerSocketThread {
+    private final int port;
+
+    @Override
+    public void run() {
+        while (true){
+            System.out.println("Server socket thread works");
+        }
+    }
+
+    ServerSocketThread (String name, int port){
+        super(name);
+        this.port = port;
+        start();
+    }
 }
