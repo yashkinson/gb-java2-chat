@@ -1,4 +1,4 @@
-package ru.gb.jtwo.client.gui;
+package ru.gb.jtwo.chat.gui;
 
 import javax.swing.*;
 import java.awt.*;

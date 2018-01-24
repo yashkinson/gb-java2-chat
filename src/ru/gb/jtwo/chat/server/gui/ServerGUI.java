@@ -1,6 +1,6 @@
-package ru.gb.jtwo.server.gui;
+package ru.gb.jtwo.chat.server.gui;
 
-import ru.gb.jtwo.server.core.ChatServer;
+import ru.gb.jtwo.chat.server.core.ChatServer;
 
 import javax.swing.*;
 import java.awt.*;
