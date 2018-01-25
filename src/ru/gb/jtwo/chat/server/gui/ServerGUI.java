@@ -49,10 +49,8 @@ public class ServerGUI extends JFrame implements ActionListener, Thread.Uncaught
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
         if(src == btnStart){
-            System.out.println("Кнопка START нажата");
             chatServer.start(8189);
         } else if(src == btnStop){
-            System.out.println("Кнопка STOP нажата");
             chatServer.stop();
         } else{
             throw new RuntimeException("Unknown button presed");

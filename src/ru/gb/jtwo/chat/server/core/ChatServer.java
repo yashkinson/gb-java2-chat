@@ -8,7 +8,6 @@ public class ChatServer {
 
     public void start(int port){
         serverSocketThread = new ServerSocketThread("Server thread", port);
-        //System.out.println("Сервер стартовал на порте " + port);
     }
 
     public void stop(){

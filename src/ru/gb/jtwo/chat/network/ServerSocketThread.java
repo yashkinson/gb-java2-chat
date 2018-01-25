@@ -8,9 +8,17 @@ public class ServerSocketThread extends Thread{
 
     @Override
     public void run() {
+        System.out.println("Server thread started");
         while (!isInterrupted()){
             System.out.println("Server socket thread works");
+            try {
+                sleep(3000);
+            } catch (InterruptedException e) {
+                System.out.println("thrown IterruptedException");
+                break;
+            }
         }
+        System.out.println("Server thread terminated");
     }
 
     public ServerSocketThread (String name, int port){
