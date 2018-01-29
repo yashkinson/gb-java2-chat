@@ -11,35 +11,39 @@ import java.net.SocketTimeoutException;
  */
 public class ServerSocketThread extends Thread{
 
+    private ServerSocketThreadListener listener;
     private final int port;
     private final int timeout;
 
     @Override
     public void run() {
-        System.out.println("Поток стартоваол");
-        try(ServerSocket serverSocket = new ServerSocket(port)){
-            System.out.println("Создали серверСокет");
+        listener.onStartServerSocketThread(this);
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
             serverSocket.setSoTimeout(timeout);
-            while (!isInterrupted()){
+            listener.onCreateServerSocket(this, serverSocket);
+            while(!isInterrupted()) {
+                Socket socket;
                 try {
-                    Socket socket = serverSocket.accept();
-                } catch (SocketTimeoutException e){
-                    System.out.println("Случился timeout accept");
+                    socket = serverSocket.accept();
+                } catch (SocketTimeoutException e) {
+                    listener.onAcceptTimeout(this, serverSocket);
                     continue;
                 }
-                System.out.println("создан новый сокет");
+                listener.onSocketAccepted(this, socket);
             }
-        } catch (IOException e){
-            e.printStackTrace();
+        } catch (IOException e) {
+            listener.onServerSocketException(this, e);
         } finally {
-            System.out.println("Поток остановился");
+            listener.onStopServerSocketThread(this);
         }
     }
 
-    public ServerSocketThread (String name, int port, int timeout){
+    public ServerSocketThread (ServerSocketThreadListener listener,
+                               String name, int port, int timeout){
         super(name);
         this.port = port;
         this.timeout = timeout;
+        this.listener = listener;
         start();
     }
 }
