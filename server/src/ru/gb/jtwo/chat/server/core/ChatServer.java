@@ -77,27 +77,27 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
 
 
     @Override
-    public void onStartSocketThread(SocketThread thread, Socket socket) {
+    public synchronized void onStartSocketThread(SocketThread thread, Socket socket) {
 
     }
 
     @Override
-    public void onStopSocketThread(SocketThread thread) {
+    public synchronized void onStopSocketThread(SocketThread thread) {
 
     }
 
     @Override
-    public void onSocketIsReady(SocketThread thread, Socket socket) {
+    public synchronized void onSocketIsReady(SocketThread thread, Socket socket) {
 
     }
 
     @Override
-    public void onReceiveString(SocketThread thread, Socket socket, String value) {
+    public synchronized void onReceiveString(SocketThread thread, Socket socket, String value) {
 
     }
 
     @Override
-    public void onSocketThreadException(SocketThread thread, Exception e) {
+    public synchronized void onSocketThreadException(SocketThread thread, Exception e) {
 
     }
 }
