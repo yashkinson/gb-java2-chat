@@ -11,7 +11,7 @@ public class SocketThread extends Thread {
     private  Socket socket;
     private DataOutputStream out;
 
-    SocketThread(SocketThreadListener listener, String name, Socket socket){
+    public SocketThread(SocketThreadListener listener, String name, Socket socket){
         super(name);
         this.socket = socket;
         this.listener = listener;

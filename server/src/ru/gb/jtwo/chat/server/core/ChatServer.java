@@ -2,13 +2,15 @@ package ru.gb.jtwo.chat.server.core;
 
 import ru.gb.jtwo.chat.network.ServerSocketThread;
 import ru.gb.jtwo.chat.network.ServerSocketThreadListener;
+import ru.gb.jtwo.chat.network.SocketThread;
+import ru.gb.jtwo.chat.network.SocketThreadListener;
 
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class ChatServer implements ServerSocketThreadListener{
+public class ChatServer implements ServerSocketThreadListener, SocketThreadListener {
 
     ServerSocketThread serverSocketThread;
     private final DateFormat dataFormat = new SimpleDateFormat("hh:mm:ss: ");
@@ -62,10 +64,40 @@ public class ChatServer implements ServerSocketThreadListener{
     @Override
     public void onSocketAccepted(ServerSocketThread thread, Socket socket) {
         putLog("Клиент подключился: " + socket);
+        String threadName = "SocketThread " + socket.getInetAddress() + ":" + socket.getPort();
+        new SocketThread(this, threadName, socket);
     }
 
     @Override
     public void onServerSocketException(ServerSocketThread thread, Exception e) {
         putLog("Exception: " + e.getClass().getName() + ": " + e.getMessage());
+    }
+
+
+
+
+    @Override
+    public void onStartSocketThread(SocketThread thread, Socket socket) {
+
+    }
+
+    @Override
+    public void onStopSocketThread(SocketThread thread) {
+
+    }
+
+    @Override
+    public void onSocketIsReady(SocketThread thread, Socket socket) {
+
+    }
+
+    @Override
+    public void onReceiveString(SocketThread thread, Socket socket, String value) {
+
+    }
+
+    @Override
+    public void onSocketThreadException(SocketThread thread, Exception e) {
+
     }
 }
