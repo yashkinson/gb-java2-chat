@@ -44,7 +44,7 @@ public class SocketThread extends Thread {
         }
     }
 
-    public boolean sandMessage(String message){
+    public synchronized boolean sandMessage(String message){
         try {
             out.writeUTF(message);
             out.flush();
@@ -56,7 +56,7 @@ public class SocketThread extends Thread {
         }
     }
 
-    public void close(){
+    public synchronized void close(){
         interrupt();
         try {
             socket.close();
