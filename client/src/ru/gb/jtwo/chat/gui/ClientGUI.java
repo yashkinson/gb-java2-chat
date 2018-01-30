@@ -41,6 +41,8 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
 
     private final JList<String> userList = new JList<>();
 
+    private SocketThread socketThread;
+
     ClientGUI() {
         Thread.setDefaultUncaughtExceptionHandler(this);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -122,6 +124,17 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
             throw new RuntimeException(e);
         }
 
+    }
+
+    private void connect() {
+        Socket socket = null;
+        try {
+            socket = new Socket(tfIPAddress.getText(),
+                    Integer.parseInt(tfPort.getText()));
+        } catch (IOException e) {
+            log.append("Exception: " + e.getMessage());
+        }
+        socketThread = new SocketThread(this, "SocketTHread", socket);
     }
 
     @Override
