@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -117,12 +116,13 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         log.append(username + ": " + msg + "\n");
         tfMessage.setText(null);
         tfMessage.requestFocusInWindow();
-        try (FileWriter out = new FileWriter("log.txt", true)){
-            out.write(username + ": " + msg + "\n");
-            out.flush();
-        } catch(IOException e){
-            throw new RuntimeException(e);
-        }
+        socketThread.sendMessage(msg);
+//        try (FileWriter out = new FileWriter("log.txt", true)){
+//            out.write(username + ": " + msg + "\n");
+//            out.flush();
+//        } catch(IOException e){
+//            throw new RuntimeException(e);
+//        }
 
     }
 

@@ -93,7 +93,7 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
 
     @Override
     public synchronized void onReceiveString(SocketThread thread, Socket socket, String value) {
-        thread.sandMessage("echo " + value);
+        thread.sendMessage("echo " + value);
     }
 
     @Override
