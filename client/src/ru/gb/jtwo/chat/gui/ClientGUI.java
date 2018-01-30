@@ -1,13 +1,17 @@
 package ru.gb.jtwo.chat.gui;
 
+import ru.gb.jtwo.chat.network.SocketThread;
+import ru.gb.jtwo.chat.network.SocketThreadListener;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.Socket;
 
-public class ClientGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler{
+public class ClientGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler, SocketThreadListener{
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -117,6 +121,36 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         } catch(IOException e){
             throw new RuntimeException(e);
         }
+
+    }
+
+    @Override
+    public void onStartSocketThread(SocketThread thread, Socket socket) {
+
+    }
+
+    @Override
+    public void onStopSocketThread(SocketThread thread) {
+
+    }
+
+    @Override
+    public void onSocketIsReady(SocketThread thread, Socket socket) {
+
+    }
+
+    @Override
+    public void onReceiveString(SocketThread thread, Socket socket, String value) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                log.append(value + "\n");
+            }
+        });
+    }
+
+    @Override
+    public void onSocketThreadException(SocketThread thread, Exception e) {
 
     }
 }
