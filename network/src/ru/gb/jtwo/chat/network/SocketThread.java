@@ -44,8 +44,16 @@ public class SocketThread extends Thread {
         }
     }
 
-    public void sandMessage(String message){
-
+    public boolean sandMessage(String message){
+        try {
+            out.writeUTF(message);
+            out.flush();
+            return true;
+        } catch (IOException e) {
+            listener.onSocketThreadException(this, e);
+            close();
+            return false;
+        }
     }
 
     public void close(){
