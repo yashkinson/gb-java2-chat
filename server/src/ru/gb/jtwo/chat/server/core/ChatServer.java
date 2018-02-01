@@ -27,14 +27,17 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
             putLog("Server is already running");
         } else{
             serverSocketThread = new ServerSocketThread(this, "Server thread", port, 2000);
+            SqlClient.connect();
         }
     }
 
     public void stop(){
-        if (serverSocketThread == null || !serverSocketThread.isAlive())
+        if (serverSocketThread == null || !serverSocketThread.isAlive()){
             putLog("Server is not running");
-        else
+        } else {
             serverSocketThread.interrupt();
+            SqlClient.disconnect();
+        }
     }
 
     void putLog(String msg){
