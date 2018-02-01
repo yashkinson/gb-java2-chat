@@ -20,8 +20,8 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         });
     }
 
-    private static final int WIDTH = 400;
-    private static final int HEIGHT = 300;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 400;
 
     private final JTextArea log = new JTextArea();
 
@@ -58,6 +58,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         tfPassword.addActionListener(this);
         tfPort.addActionListener(this);
         btnLogin.addActionListener(this);
+        btnLogin.addActionListener(this);
 
         panelTop.add(tfIPAddress);
         panelTop.add(tfPort);
@@ -75,6 +76,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         JScrollPane scrollPane = new JScrollPane(log);
         add(scrollPane, BorderLayout.CENTER);
         log.setEditable(false);
+        log.setLineWrap(true);
 
         JScrollPane scrollUsers = new JScrollPane(userList);
         scrollUsers.setPreferredSize(new Dimension(100, 0));
@@ -111,6 +113,8 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         } else if (src == tfIPAddress || src == tfLogin ||
                 src == tfPassword || src == tfPort || src == btnLogin) {
             connect();
+        } else if (src == btnDisconnect) {
+            socketThread.close();
         } else {
             throw new RuntimeException("Unknown source: " + src);
         }
