@@ -1,13 +1,14 @@
 package ru.gb.jtwo.chat.server.gui;
 
 import ru.gb.jtwo.chat.server.core.ChatServer;
+import ru.gb.jtwo.chat.server.core.ChatServerListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ServerGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler{
+public class ServerGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler, ChatServerListener{
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -22,7 +23,7 @@ public class ServerGUI extends JFrame implements ActionListener, Thread.Uncaught
     private static final int WIDTH = 700;
     private static final int HEIGHT = 400;
 
-    private final ChatServer chatServer = new ChatServer();
+    private final ChatServer chatServer = new ChatServer(this);
 
     private final JPanel panelTop = new JPanel(new GridLayout(1, 2));
     private final JButton btnStart = new JButton("Start");
@@ -81,5 +82,16 @@ public class ServerGUI extends JFrame implements ActionListener, Thread.Uncaught
         // Показываем полученое исключение в отдельном всплывающем окошке
         JOptionPane.showMessageDialog(this, message, "Exception", JOptionPane.ERROR_MESSAGE);
         System.exit(1);
+    }
+
+    @Override
+    public void onChatServerLog(ChatServer server, String message) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                log.append(message + "\n");
+                log.setCaretPosition(log.getDocument().getLength());
+            }
+        });
     }
 }
