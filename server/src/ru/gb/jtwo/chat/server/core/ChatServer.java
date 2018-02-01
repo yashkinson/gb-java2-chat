@@ -91,6 +91,7 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
     @Override
     public synchronized void onStopSocketThread(SocketThread thread) {
         putLog("stopped");
+        clients.remove(thread);
     }
 
     @Override
