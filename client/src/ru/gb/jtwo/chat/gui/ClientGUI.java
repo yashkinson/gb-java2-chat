@@ -119,9 +119,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
 
     public void sendMessage(){
         String msg = tfMessage.getText();
-        String username = tfLogin.getText();
         if("".equals(msg)) return;
-        log.append(username + ": " + msg + "\n");
         tfMessage.setText(null);
         tfMessage.requestFocusInWindow();
         socketThread.sendMessage(msg);
