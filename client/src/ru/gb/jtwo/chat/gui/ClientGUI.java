@@ -58,7 +58,6 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         tfPassword.addActionListener(this);
         tfPort.addActionListener(this);
         btnLogin.addActionListener(this);
-        btnLogin.addActionListener(this);
 
         panelTop.add(tfIPAddress);
         panelTop.add(tfPort);
@@ -72,6 +71,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         panelBottom.add(tfMessage, BorderLayout.CENTER);
         panelBottom.add(btnSend, BorderLayout.EAST);
         add(panelBottom, BorderLayout.SOUTH);
+        panelBottom.setVisible(false);
 
         JScrollPane scrollPane = new JScrollPane(log);
         add(scrollPane, BorderLayout.CENTER);
@@ -147,19 +147,28 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         socketThread = new SocketThread(this, "SocketTHread", socket);
     }
 
+    private void putLog(String message) {
+        log.append(message + "\n");
+        log.setCaretPosition(log.getDocument().getLength());
+    }
+
     @Override
     public void onStartSocketThread(SocketThread thread, Socket socket) {
-
+        putLog("Поток сокета стартовал");
     }
 
     @Override
     public void onStopSocketThread(SocketThread thread) {
-
+        putLog("Соединение разорвано");
+        panelBottom.setVisible(false);
+        panelTop.setVisible(true);
     }
 
     @Override
     public void onSocketIsReady(SocketThread thread, Socket socket) {
-
+        putLog("Соединение установлено");
+        panelBottom.setVisible(true);
+        panelTop.setVisible(false);
     }
 
     @Override
