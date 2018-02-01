@@ -18,7 +18,11 @@ public class SqlClient {
     }
 
     synchronized static void disconnect(){
-
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     synchronized static String getNick(String login, String password) {
