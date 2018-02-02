@@ -105,14 +105,20 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
 
     @Override
     public synchronized void onReceiveString(SocketThread thread, Socket socket, String value) {
-        for(int i = 0; i < clients.size(); i++){
-            SocketThread client = clients.get(i);
-            client.sendMessage(value);
-        }
+
     }
 
     @Override
     public synchronized void onSocketThreadException(SocketThread thread, Exception e) {
         e.printStackTrace();
+    }
+
+    //рассылка всем авторизованным клиентам
+    private void sendToAuthorizedClients(String value) {
+        for (int i = 0; i < clients.size(); i++) {
+            ClientThread client = (ClientThread) clients.get(i);
+            if(!client.isAuthorized()) continue;
+            client.sendMessage(value);
+        }
     }
 }
