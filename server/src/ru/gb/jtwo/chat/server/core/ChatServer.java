@@ -1,5 +1,6 @@
 package ru.gb.jtwo.chat.server.core;
 
+import ru.gb.jtwo.chat.library.Messages;
 import ru.gb.jtwo.chat.network.ServerSocketThread;
 import ru.gb.jtwo.chat.network.ServerSocketThreadListener;
 import ru.gb.jtwo.chat.network.SocketThread;
@@ -105,12 +106,25 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
 
     @Override
     public synchronized void onReceiveString(SocketThread thread, Socket socket, String value) {
-
+        ClientThread client = (ClientThread) thread;
+        if (client.isAuthorized()) {
+            handleAuthMessages(client, value);
+        } else {
+            handleNonAuthMessages(client, value);
+        }
     }
 
     @Override
     public synchronized void onSocketThreadException(SocketThread thread, Exception e) {
         e.printStackTrace();
+    }
+
+    void handleAuthMessages(ClientThread client, String value) {
+        sendToAuthorizedClients(Messages.getTypeBroadcast(client.getNickname(), value));
+    }
+
+    void handleNonAuthMessages(ClientThread client, String value) {
+
     }
 
     //рассылка всем авторизованным клиентам
