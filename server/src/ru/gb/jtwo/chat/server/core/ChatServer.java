@@ -76,7 +76,7 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
     public void onSocketAccepted(ServerSocketThread thread, Socket socket) {
         putLog("Клиент подключился: " + socket);
         String threadName = "SocketThread " + socket.getInetAddress() + ":" + socket.getPort();
-        new SocketThread(this, threadName, socket);
+        new ClientThread(this, threadName, socket);
     }
 
     @Override
@@ -124,7 +124,22 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
     }
 
     void handleNonAuthMessages(ClientThread client, String value) {
-
+        String[] arr = value.split(Messages.DELIMITER);
+        if (arr.length != 3 || !arr[0].equals(Messages.AUTH_REQUEST)) {
+            client.msgFormatError(value);
+            return;
+        }
+        String login = arr[1];
+        String password = arr[2];
+        String nickname = SqlClient.getNick(login, password);
+        if (nickname == null) {
+            putLog("Invalid login/password: login '" +
+                    login + "' password: '" + password + "'");
+            client.authorizeError();
+            return;
+        }
+        client.authorizeAccept(nickname);
+        sendToAuthorizedClients(Messages.getTypeBroadcast("Server", nickname + " connected"));
     }
 
     //рассылка всем авторизованным клиентам
