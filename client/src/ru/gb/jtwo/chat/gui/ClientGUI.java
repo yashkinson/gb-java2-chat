@@ -1,5 +1,6 @@
 package ru.gb.jtwo.chat.gui;
 
+import ru.gb.jtwo.chat.library.Messages;
 import ru.gb.jtwo.chat.network.SocketThread;
 import ru.gb.jtwo.chat.network.SocketThreadListener;
 
@@ -167,6 +168,9 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
     @Override
     public void onSocketIsReady(SocketThread thread, Socket socket) {
         putLog("Соединение установлено");
+        String login = tfLogin.getText();
+        String password = new String(tfPassword.getPassword());
+        thread.sendMessage(Messages.getAuthRequest(login, password));
         panelBottom.setVisible(true);
         panelTop.setVisible(false);
     }
