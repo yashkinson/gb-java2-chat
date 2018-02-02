@@ -1,4 +1,4 @@
-package ru.iovchinnikov.gb.chat.library;
+package ru.gb.jtwo.chat.library;
 
 public class Messages {
     /*
