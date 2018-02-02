@@ -10,7 +10,7 @@ public class ChatServer {
         if (serverSocketThread != null && serverSocketThread.isAlive()){
             System.out.println("Server is already running");
         } else{
-            serverSocketThread = new ServerSocketThread("Server thread", port);
+            serverSocketThread = new ServerSocketThread("Server thread", port, 2000);
         }
     }
 
