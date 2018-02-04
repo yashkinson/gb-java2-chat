@@ -47,6 +47,16 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
         listener.onChatServerLog(this, msg);
     }
 
+    private String getUsers() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < clients.size(); i++) {
+            ClientThread client = (ClientThread) clients.get(i);
+            if (!client.isAuthorized()) continue;
+            stringBuilder.append(client.getNickname()).append(Messages.DELIMITER);
+        }
+        return stringBuilder.toString();
+    }
+
     /**
      * Методы Server Socket Thread
      *
@@ -84,8 +94,9 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
         putLog("Exception: " + e.getClass().getName() + ": " + e.getMessage());
     }
 
-
-
+    /**
+     * Методы Socket thread'a
+     */
 
     @Override
     public synchronized void onStartSocketThread(SocketThread thread, Socket socket) {
