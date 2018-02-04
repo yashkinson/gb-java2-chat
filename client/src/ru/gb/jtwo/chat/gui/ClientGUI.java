@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 public class ClientGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler, SocketThreadListener{
     public static void main(String[] args) {
@@ -175,6 +176,12 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
             case Messages.TYPE_BROADCAST:
                 putLog(dateFormat.format(Long.parseLong(arr[1])) + arr[2] + ": " + arr[3]);
                 break;
+            case Messages.USER_LIST:
+                String users = value.substring(Messages.USER_LIST.length() + Messages.DELIMITER.length());
+                String[] userArray = users.split(Messages.DELIMITER);
+                Arrays.sort(userArray);
+                userList.setListData(userArray);
+                break;
             default:
                 throw new RuntimeException("Unknown message format: " + value);
         }
@@ -189,6 +196,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
     public void onStopSocketThread(SocketThread thread) {
         putLog("Соединение разорвано");
         setTitle(WINDOW_TITLE);
+        userList.setListData(new String[0]);
         panelBottom.setVisible(false);
         panelTop.setVisible(true);
     }
