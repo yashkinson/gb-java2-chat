@@ -111,6 +111,7 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
         if (client.isAuthorized()) {
             sendToAuthorizedClients(Messages.getTypeBroadcast("Server",
                     client.getNickname() + " disconnected"));
+            sendToAuthorizedClients(Messages.getUserList(getUsers()));
         }
     }
 
@@ -156,6 +157,7 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
         }
         client.authorizeAccept(nickname);
         sendToAuthorizedClients(Messages.getTypeBroadcast("Server", nickname + " connected"));
+        sendToAuthorizedClients(Messages.getUserList(getUsers()));
     }
 
     //рассылка всем авторизованным клиентам
