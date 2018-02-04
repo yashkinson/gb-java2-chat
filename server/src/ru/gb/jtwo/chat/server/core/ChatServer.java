@@ -95,7 +95,12 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
     @Override
     public synchronized void onStopSocketThread(SocketThread thread) {
         putLog("stopped");
+        ClientThread client = (ClientThread) thread;
         clients.remove(thread);
+        if (client.isAuthorized()) {
+            sendToAuthorizedClients(Messages.getTypeBroadcast("Server",
+                    client.getNickname() + " disconnected"));
+        }
     }
 
     @Override
