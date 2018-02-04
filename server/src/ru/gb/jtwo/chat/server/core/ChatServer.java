@@ -146,11 +146,19 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
         return null;
     }
 
-    void handleAuthMessages(ClientThread client, String value) {
-        sendToAuthorizedClients(Messages.getTypeBroadcast(client.getNickname(), value));
+    private void handleAuthMessages(ClientThread client, String value) {
+        String[] arr = value.split(Messages.DELIMITER);
+        String msgType = arr[0];
+        switch (msgType) {
+            case Messages.TYPE_RANGECAST:
+                sendToAuthorizedClients(Messages.getTypeBroadcast(client.getNickname(), arr[1]));
+                break;
+            default:
+                client.msgFormatError(value);
+        }
     }
 
-    void handleNonAuthMessages(ClientThread newClient, String value) {
+    private void handleNonAuthMessages(ClientThread newClient, String value) {
         String[] arr = value.split(Messages.DELIMITER);
         if (arr.length != 3 || !arr[0].equals(Messages.AUTH_REQUEST)) {
             newClient.msgFormatError(value);

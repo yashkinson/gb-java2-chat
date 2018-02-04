@@ -17,7 +17,13 @@ public class Messages {
     public static final String AUTH_DENIED =        "/auth_denied";
     public static final String MSG_FORMAT_ERROR =   "/msg_format_error";
     public static final String TYPE_BROADCAST =     "/bcast";
+    public static final String TYPE_RANGECAST =     "/rangecast";
     public static final String USER_LIST =          "/userlist";
+
+    public static String getTypeRangecast(String message) {
+        return TYPE_RANGECAST + DELIMITER + message;
+    }
+
 
     public static String getUserList(String users) {
         return USER_LIST + DELIMITER + users;
