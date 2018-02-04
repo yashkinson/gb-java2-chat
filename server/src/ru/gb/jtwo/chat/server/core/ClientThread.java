@@ -14,6 +14,7 @@ public class ClientThread extends SocketThread {
 
     private String nickname;
     private boolean isAuthorized;
+    private boolean isReconnected;
 
     String getNickname() {
         return nickname;
@@ -36,6 +37,15 @@ public class ClientThread extends SocketThread {
 
     void msgFormatError(String value) {
         sendMessage(Messages.getMsgFormatError(value));
+        close();
+    }
+
+    public boolean isReconnected() {
+        return isReconnected;
+    }
+
+    void reconnect() {
+        isReconnected = true;
         close();
     }
 }

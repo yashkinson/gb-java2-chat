@@ -136,14 +136,24 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
         e.printStackTrace();
     }
 
+    private ClientThread findClientByNickname (String nickname) {
+        for (int i = 0; i < clients.size(); i++) {
+            ClientThread client = (ClientThread) clients.get(i);
+            if (!client.isAuthorized()) continue;
+            if (client.getNickname().equals(nickname))
+                return client;
+        }
+        return null;
+    }
+
     void handleAuthMessages(ClientThread client, String value) {
         sendToAuthorizedClients(Messages.getTypeBroadcast(client.getNickname(), value));
     }
 
-    void handleNonAuthMessages(ClientThread client, String value) {
+    void handleNonAuthMessages(ClientThread newClient, String value) {
         String[] arr = value.split(Messages.DELIMITER);
         if (arr.length != 3 || !arr[0].equals(Messages.AUTH_REQUEST)) {
-            client.msgFormatError(value);
+            newClient.msgFormatError(value);
             return;
         }
         String login = arr[1];
@@ -152,11 +162,18 @@ public class ChatServer implements ServerSocketThreadListener, SocketThreadListe
         if (nickname == null) {
             putLog("Invalid login/password: login '" +
                     login + "' password: '" + password + "'");
-            client.authorizeError();
+            newClient.authorizeError();
             return;
         }
-        client.authorizeAccept(nickname);
-        sendToAuthorizedClients(Messages.getTypeBroadcast("Server", nickname + " connected"));
+
+        ClientThread client = findClientByNickname(nickname);
+        newClient.authorizeAccept(nickname);
+        if (client == null) {
+            sendToAuthorizedClients(Messages.getTypeBroadcast("Server", nickname + " connected"));
+        } else {
+            client.reconnect();
+            clients.remove(client);
+        }
         sendToAuthorizedClients(Messages.getUserList(getUsers()));
     }
 
