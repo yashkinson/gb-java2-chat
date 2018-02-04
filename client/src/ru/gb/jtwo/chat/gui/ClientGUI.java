@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class ClientGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler, SocketThreadListener{
     public static void main(String[] args) {
@@ -23,6 +25,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
 
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
+    private static final String WINDOW_TITLE = "Chat Client";
 
     private final JTextArea log = new JTextArea();
 
@@ -41,6 +44,8 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
 
     private final JList<String> userList = new JList<>();
 
+    private final DateFormat dateFormat = new SimpleDateFormat("hh:mm:ss: ");
+
     private SocketThread socketThread;
 
     ClientGUI() {
@@ -49,7 +54,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
 
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
-        setTitle("Chat Client");
+        setTitle(WINDOW_TITLE);
 
         cbAlwaysOnTop.addActionListener(this);
         btnSend.addActionListener(this);
@@ -153,6 +158,28 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         log.setCaretPosition(log.getDocument().getLength());
     }
 
+    void handleMessage(String value){
+        String[] arr = value.split(Messages.DELIMITER);
+        String msgType = arr[0];
+        switch (msgType) {
+            case Messages.AUTH_ACCEPT:
+                setTitle(WINDOW_TITLE + " вход под ником: " + arr[1]);
+                break;
+            case Messages.AUTH_DENIED:
+                putLog(value);
+                break;
+            case Messages.MSG_FORMAT_ERROR:
+                putLog(value);
+                socketThread.close();
+                break;
+            case Messages.TYPE_BROADCAST:
+                putLog(dateFormat.format(Long.parseLong(arr[1])) + arr[2] + ": " + arr[3]);
+                break;
+            default:
+                throw new RuntimeException("Unknown message format: " + value);
+        }
+    }
+
     @Override
     public void onStartSocketThread(SocketThread thread, Socket socket) {
         putLog("Поток сокета стартовал");
@@ -161,6 +188,7 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
     @Override
     public void onStopSocketThread(SocketThread thread) {
         putLog("Соединение разорвано");
+        setTitle(WINDOW_TITLE);
         panelBottom.setVisible(false);
         panelTop.setVisible(true);
     }
@@ -180,10 +208,11 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                log.append(value + "\n");
+                handleMessage(value);
             }
         });
     }
+
 
     @Override
     public void onSocketThreadException(SocketThread thread, Exception e) {
